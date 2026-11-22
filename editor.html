@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Editor isi website</title>
+  <style>
+    :root{--pine:#0E3B34;--gold:#D4A24A;--line:#CBD6D1;--mist:#E6EEE9;--ink:#14201E;--muted:#4B5C58}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:#F8F9F6;line-height:1.5}
+    header.bar{position:sticky;top:0;z-index:10;background:var(--pine);color:#fff;padding:.8rem 1rem;display:flex;flex-wrap:wrap;gap:.6rem 1rem;align-items:center;justify-content:space-between}
+    header.bar h1{font-size:1.05rem;margin:0}
+    .btn{background:var(--gold);color:#0A2A25;border:0;border-radius:8px;padding:.6rem 1.1rem;font-weight:600;font-size:.95rem;cursor:pointer;font-family:inherit}
+    .btn.small{padding:.3rem .65rem;font-size:.82rem;background:#fff;border:1px solid var(--line);color:var(--ink);font-weight:500}
+    .btn.danger{color:#9B1C1C;border-color:#E3B4B4}
+    .btn.add{background:var(--mist);border:1px dashed var(--pine);color:var(--pine)}
+    main{max-width:860px;margin:0 auto;padding:1.2rem 1rem 4rem}
+    .note{background:#FFF8E6;border:1px solid #E7CF8E;border-radius:8px;padding:.8rem 1rem;font-size:.92rem;margin-bottom:1.2rem}
+    details{background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:.8rem}
+    details>summary{cursor:pointer;padding:.9rem 1rem;font-weight:600;font-size:1.02rem;list-style:none}
+    details>summary::after{content:"+";float:right;font-weight:400}
+    details[open]>summary::after{content:"–"}
+    details>.body{padding:0 1rem 1rem}
+    label{display:block;font-size:.85rem;color:var(--muted);margin:.8rem 0 .25rem}
+    input[type=text],textarea{width:100%;padding:.55rem .65rem;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff;color:var(--ink)}
+    textarea{min-height:5.2rem;resize:vertical}
+    input:focus,textarea:focus,button:focus-visible{outline:3px solid var(--gold);outline-offset:1px}
+    fieldset{border:1px solid var(--line);border-radius:8px;margin:.9rem 0 0;padding:.2rem .9rem .9rem}
+    fieldset legend{font-weight:600;font-size:.9rem;padding:0 .4rem}
+    .item{border:1px solid var(--line);border-radius:8px;background:#FBFCFA;margin-top:.7rem;padding:.2rem .9rem .8rem}
+    .item .tools{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.7rem;align-items:center}
+    .item .tools strong{margin-right:auto;font-size:.9rem}
+    .srow{display:flex;gap:.4rem;align-items:flex-start;margin-top:.5rem}
+    .srow textarea,.srow input{flex:1}
+    .srow textarea{min-height:2.6rem}
+    .hint{font-size:.82rem;color:var(--muted);margin:.3rem 0 0}
+    #toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--pine);color:#fff;padding:.7rem 1.1rem;border-radius:8px;display:none;z-index:20}
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <h1>Editor isi website</h1>
+    <button class="btn" id="unduh" type="button">Unduh content.js</button>
+  </header>
+  <main>
+    <div class="note">
+      <strong>Cara pakai:</strong> ubah isi lewat formulir di bawah, klik <em>Unduh content.js</em>, lalu ganti berkas
+      <code>content.js</code> di GitHub dengan berkas hasil unduhan. Cloudflare akan memperbarui website otomatis.
+      Foto diisi dengan jalur berkas, misalnya <code>assets/gedung.jpg</code> (unggah fotonya ke folder <code>assets</code> di GitHub).
+      Perubahan di halaman ini belum tersimpan sampai berkas diunduh dan diunggah.
+    </div>
+    <div id="form"></div>
+  </main>
+  <div id="toast" role="status"></div>
+
+  <script src="content.js"></script>
+  <script>
+  (function () {
+    "use strict";
+    if (!window.SITE) { document.getElementById("form").textContent = "content.js tidak ditemukan."; return; }
+    var data = JSON.parse(JSON.stringify(window.SITE));
+    var openPaths = {};
+    var form = document.getElementById("form");
+
+    var LABELS = {
+      tema: "Warna", identitas: "Identitas pesantren", hero: "Bagian paling atas", tentang: "Tentang pesantren",
+      program: "Program pendidikan", kegiatan: "Jadwal harian", fasilitas: "Fasilitas", pengasuh: "Pengasuh dan pengajar",
+      berita: "Kabar dan pengumuman", galeri: "Galeri foto", pendaftaran: "Pendaftaran", kontak: "Kontak", footer: "Kaki halaman"
+    };
+    function nice(k) {
+      var s = String(k).replace(/([A-Z])/g, " $1").toLowerCase();
+      return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+    function el(tag, props) {
+      var e = document.createElement(tag);
+      Object.keys(props || {}).forEach(function (k) {
+        if (k === "text") e.textContent = props[k]; else e.setAttribute(k, props[k]);
+      });
+      for (var i = 2; i < arguments.length; i++) if (arguments[i]) e.appendChild(arguments[i]);
+      return e;
+    }
+    function blank(v) {
+      if (Array.isArray(v)) return [];
+      if (v && typeof v === "object") { var o = {}; Object.keys(v).forEach(function (k) { o[k] = blank(v[k]); }); return o; }
+      return "";
+    }
+    function summary(o) {
+      if (typeof o === "string") return o;
+      var keys = Object.keys(o);
+      for (var i = 0; i < keys.length; i++) if (typeof o[keys[i]] === "string" && o[keys[i]]) return o[keys[i]];
+      return "";
+    }
+    function field(parent, key, value, set) {
+      var long = String(value).length > 70 || /deskripsi|paragraf|ringkasan|keterangan|sejarah|visi|tagline|alamat/i.test(key);
+      var id = "f" + Math.random().toString(36).slice(2);
+      var input = long ? el("textarea", { id: id }) : el("input", { id: id, type: "text" });
+      input.value = value;
+      input.addEventListener("input", function () { set(input.value); });
+      parent.appendChild(el("label", { "for": id, text: nice(key) }));
+      parent.appendChild(input);
+      if (/foto|logo|src/i.test(key)) parent.appendChild(el("p", { "class": "hint", text: "Isi dengan jalur berkas, contoh: assets/nama-foto.jpg. Kosongkan jika tidak ada." }));
+      if (key === "peta") parent.appendChild(el("p", { "class": "hint", text: "Di Google Maps: Bagikan > Sematkan peta, lalu salin alamat di dalam src=\"...\"." }));
+      if (key === "whatsapp") parent.appendChild(el("p", { "class": "hint", text: "Tulis dengan kode negara, contoh: 6281234567890." }));
+    }
+    function templateFor(path) {
+      var node = window.SITE;
+      path.split(".").forEach(function (seg) {
+        if (node === undefined) return;
+        node = /^\d+$/.test(seg) ? (Array.isArray(node) ? node[0] : node) : node[seg];
+      });
+      return Array.isArray(node) && node.length ? node[0] : "";
+    }
+    function renderValue(parent, container, k, path) {
+      var v = container[k];
+      var p = path + "." + k;
+      if (Array.isArray(v)) return renderList(parent, container, k, p);
+      if (v && typeof v === "object") {
+        var fs = el("fieldset", null, el("legend", { text: nice(k) }));
+        Object.keys(v).forEach(function (kk) { renderValue(fs, v, kk, p); });
+        return parent.appendChild(fs);
+      }
+      if (typeof v === "boolean") {
+        var id = "c" + Math.random().toString(36).slice(2);
+        var cb = el("input", { id: id, type: "checkbox" });
+        cb.checked = v;
+        cb.addEventListener("change", function () { container[k] = cb.checked; });
+        var lab = el("label", { "for": id });
+        lab.appendChild(cb); lab.appendChild(document.createTextNode(" " + nice(k)));
+        return parent.appendChild(lab);
+      }
+      field(parent, k, v === undefined ? "" : v, function (val) { container[k] = val; });
+    }
+    function renderList(parent, container, k, path) {
+      var arr = container[k];
+      var fs = el("fieldset", null, el("legend", { text: nice(k) }));
+      var isObj = arr.length && typeof arr[0] === "object";
+      arr.forEach(function (item, i) {
+        var tools = el("div", { "class": "tools" });
+        var title = summary(item);
+        tools.appendChild(el("strong", { text: "Item " + (i + 1) + (title ? ": " + title.slice(0, 40) : "") }));
+        [["Naik", -1], ["Turun", 1]].forEach(function (b) {
+          var j = i + b[1];
+          if (j < 0 || j >= arr.length) return;
+          var bt = el("button", { type: "button", "class": "btn small", text: b[0] });
+          bt.addEventListener("click", function () { var t = arr[i]; arr[i] = arr[j]; arr[j] = t; rerender(); });
+          tools.appendChild(bt);
+        });
+        var del = el("button", { type: "button", "class": "btn small danger", text: "Hapus" });
+        del.addEventListener("click", function () { arr.splice(i, 1); rerender(); });
+        tools.appendChild(del);
+
+        if (typeof item === "object") {
+          var box = el("div", { "class": "item" });
+          Object.keys(item).forEach(function (kk) { renderValue(box, item, kk, path + "." + i); });
+          box.appendChild(tools);
+          fs.appendChild(box);
+        } else {
+          var row = el("div", { "class": "srow" });
+          var ta = el("textarea");
+          ta.value = item;
+          ta.addEventListener("input", function () { arr[i] = ta.value; });
+          row.appendChild(ta);
+          [["↑", -1], ["↓", 1]].forEach(function (b) {
+            var j = i + b[1];
+            if (j < 0 || j >= arr.length) return;
+            var bt = el("button", { type: "button", "class": "btn small", text: b[0], "aria-label": b[1] < 0 ? "Naik" : "Turun" });
+            bt.addEventListener("click", function () { var t = arr[i]; arr[i] = arr[j]; arr[j] = t; rerender(); });
+            row.appendChild(bt);
+          });
+          var d2 = el("button", { type: "button", "class": "btn small danger", text: "Hapus" });
+          d2.addEventListener("click", function () { arr.splice(i, 1); rerender(); });
+          row.appendChild(d2);
+          fs.appendChild(row);
+        }
+      });
+      var add = el("button", { type: "button", "class": "btn small add", text: "+ Tambah item", style: "margin-top:.8rem" });
+      add.addEventListener("click", function () {
+        arr.push(blank(arr.length ? arr[0] : templateFor(path)));
+        rerender();
+      });
+      fs.appendChild(add);
+      parent.appendChild(fs);
+    }
+    function render() {
+      form.textContent = "";
+      Object.keys(data).forEach(function (sec) {
+        var d = el("details", { "data-p": sec });
+        if (openPaths[sec]) d.setAttribute("open", "");
+        d.addEventListener("toggle", function () { openPaths[sec] = d.open; });
+        d.appendChild(el("summary", { text: LABELS[sec] || nice(sec) }));
+        var body = el("div", { "class": "body" });
+        var v = data[sec];
+        Object.keys(v).forEach(function (k) { renderValue(body, v, k, sec); });
+        d.appendChild(body);
+        form.appendChild(d);
+      });
+    }
+    function rerender() {
+      var y = window.scrollY;
+      render();
+      window.scrollTo(0, y);
+    }
+
+    var HEAD = "/*\n  ISI WEBSITE PESANTREN\n  Berkas ini dibuat oleh editor.html. Boleh juga diedit langsung.\n  Ganti teks di antara tanda kutip saja; jangan hapus tanda kutip, koma, atau kurung.\n*/\n";
+    document.getElementById("unduh").addEventListener("click", function () {
+      var text = HEAD + "window.SITE = " + JSON.stringify(data, null, 2) + ";\n";
+      var blob = new Blob([text], { type: "text/javascript" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "content.js";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+      var t = document.getElementById("toast");
+      t.textContent = "content.js sudah diunduh. Unggah ke GitHub untuk memperbarui website.";
+      t.style.display = "block";
+      setTimeout(function () { t.style.display = "none"; }, 4000);
+    });
+
+    render();
+  })();
+  </script>
+</body>
+</html>

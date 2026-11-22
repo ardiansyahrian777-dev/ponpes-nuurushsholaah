@@ -36,11 +36,11 @@ window.SITE = {
       "Paragraf kedua bisa berisi sistem pendidikan, jumlah santri, atau cerita singkat perjalanan pesantren.",
       "Tulis profil singkat pesantren di sini: siapa yang mendirikan, di mana lokasinya, dan apa yang membuat pesantren ini khas."
     ],
-    "visi": "Tulis visi pesantren dalam satu atau dua kalimat.",
+    "visi": "Terwujudnya generasi muslim yang berilmu amaliah, berakhlakul karimah, dan istiqamah dalam dakwah, berlandaskan Al-Qur’an, As-Sunnah, serta manhaj salafus shalih.",
     "misi": [
-      "Tulis misi pertama.",
-      "Tulis misi kedua.",
-      "Tulis misi ketiga."
+      "Menyelenggarakan pendidikan Islam yang mendalam dalam ilmu syar‘i, bahasa Arab, dan ilmu alat.",
+      "Membina akhlakul karimah, adab, dan kepribadian Islami dalam kehidupan sehari-hari.",
+      "Menyiapkan kader da‘i yang bijaksana, santun, dan istiqamah dalam menyebarkan ajaran Islam."
     ],
     "sejarah": "Tulis sejarah berdirinya pesantren: tahun berdiri, pendiri, dan tonggak penting."
   },

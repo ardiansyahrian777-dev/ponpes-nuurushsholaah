@@ -13,12 +13,12 @@ window.SITE = {
     "nama": "Pondok Pesantren Nuurush Sholaah",
     "namaSingkat": "Nuurush Sholaah",
     "tagline": "Belajar ilmu agama dan ilmu dunia dalam satu lingkungan yang tertata dan penuh adab.",
-    "logo": "",
+    "logo": "logo.PNG",
     "tampilkanBismillah": true
   },
   "hero": {
     "judul": "Berdiri dengan 3 Maqosid, Ilmu, Akhlak dan Dakwah",
-    "deskripsi": "Pesantren yang memadukan kajian kitab, hafalan Al-Qur'an, dan pendidikan formal, dengan bimbingan para ustaz dan ustazah sepanjang hari.",
+    "deskripsi": "Pesantren Ahlu Sunnah Wal Jama`ah, dengan ilmu bersanad mencetak generasi kader dakwah dengan berakhlaqul karimah dan berwawasan ilmiah.",
     "tombolUtama": {
       "teks": "Daftar santri baru",
       "link": "#pendaftaran"
@@ -33,8 +33,8 @@ window.SITE = {
     "menu": "Tentang",
     "judul": "Tentang pesantren",
     "paragraf": [
-      "Paragraf kedua bisa berisi sistem pendidikan, jumlah santri, atau cerita singkat perjalanan pesantren.",
-      "Tulis profil singkat pesantren di sini: siapa yang mendirikan, di mana lokasinya, dan apa yang membuat pesantren ini khas."
+      "Pondok Pesantren yang berlandaskan Ahlu Sunnah Wal Jamaah ini dipimpin oleh guru mulia Al-Habib Zaky bin Abdullah Al-Munawwar.",
+      "Pondok yang baru berusia kurang lebih 7 tahun, kami selalu melakukan perkembangan dan kemajuan agar pondok semakin maju."
     ],
     "visi": "Terwujudnya generasi muslim yang berilmu amaliah, berakhlakul karimah, dan istiqamah dalam dakwah, berlandaskan Al-Qur’an, As-Sunnah, serta manhaj salafus shalih.",
     "misi": [
@@ -42,7 +42,7 @@ window.SITE = {
       "Membina akhlakul karimah, adab, dan kepribadian Islami dalam kehidupan sehari-hari.",
       "Menyiapkan kader da‘i yang bijaksana, santun, dan istiqamah dalam menyebarkan ajaran Islam."
     ],
-    "sejarah": "Tulis sejarah berdirinya pesantren: tahun berdiri, pendiri, dan tonggak penting."
+    "sejarah": "Pondok yang didirikan pada tahun 2019 yang diberi nama oleh guru mulia Al-Habib Umar bin Hafidz."
   },
   "program": {
     "menu": "Pendidikan",
@@ -110,32 +110,32 @@ window.SITE = {
     "daftar": [
       {
         "nama": "Aula Serbaguna",
-        "deskripsi": "Isi dengan keterangan singkat.",
+        "deskripsi": ".",
         "foto": "assets/fasilitas-1.jpg"
       },
       {
         "nama": "Asrama santri",
-        "deskripsi": "Isi dengan keterangan singkat.",
+        "deskripsi": ".",
         "foto": "assets/fasilitas-2.jpg"
       },
       {
         "nama": "Ruang kelas",
-        "deskripsi": "Isi dengan keterangan singkat.",
+        "deskripsi": ".",
         "foto": "assets/fasilitas-3.jpg"
       },
       {
-        "nama": "Perpustakaan",
-        "deskripsi": "Isi dengan keterangan singkat.",
+        "nama": "Kamar Mandi",
+        "deskripsi": ".",
         "foto": "assets/fasilitas-4.jpg"
       },
       {
         "nama": "Dapur dan ruang makan",
-        "deskripsi": "Isi dengan keterangan singkat.",
+        "deskripsi": ".",
         "foto": "assets/fasilitas-5.jpg"
       },
       {
         "nama": "Lapangan olahraga",
-        "deskripsi": "Isi dengan keterangan singkat.",
+        "deskripsi": ".",
         "foto": "assets/fasilitas-6.jpg"
       }
     ]
@@ -145,15 +145,15 @@ window.SITE = {
     "judul": "Kabar dan pengumuman",
     "daftar": [
       {
-        "tanggal": "17 November 2026",
+        "tanggal": "30 November 2026 s/d Maret 2027",
         "judul": "Pendaftaran Gelombang 1",
         "ringkasan": "Ringkasan satu atau dua kalimat tentang pengumuman ini.",
         "link": ""
       },
       {
-        "tanggal": "1 November 2026",
+        "tanggal": "1 April 2027 s/d 30 Mei 2027",
         "judul": "Pendaftaran Gelombang 2",
-        "ringkasan": "Ringkasan satu atau dua kalimat tentang kegiatan ini.",
+        "ringkasan": "Dibuka jika kuota belum dipenuhi.",
         "link": ""
       }
     ]
@@ -164,7 +164,7 @@ window.SITE = {
     "foto": [
       {
         "src": "murojaah.jpg",
-        "keterangan": "Keterangan foto 1"
+        "keterangan": "Suasana Murojaah Santri"
       },
       {
         "src": "assets/galeri-2.jpg",
@@ -207,7 +207,7 @@ window.SITE = {
   "pendaftaran": {
     "menu": "Pendaftaran",
     "judul": "Pendaftaran Santri Baru",
-    "intro": "Tulis informasi gelombang pendaftaran yang sedang dibuka.",
+    "intro": "Pendaftaran gelombang 1 telah dibuka.",
     "alur": [
       {
         "judul": "Isi formulir",
@@ -233,7 +233,7 @@ window.SITE = {
     ],
     "tombol": {
       "teks": "Buka formulir pendaftaran",
-      "link": ""
+      "link": "https://forms.gle/bMHWi1Mg3Y2Gtoak7"
     }
   },
   "kontak": {
